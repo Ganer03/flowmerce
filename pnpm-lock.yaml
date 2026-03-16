@@ -44,7 +44,7 @@ importers:
         version: https://registry.npmjs.org/eslint-config-prettier/-/eslint-config-prettier-9.1.0.tgz(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)
       eslint-config-standard-with-typescript:
         specifier: ^39.1.1
-        version: https://registry.npmjs.org/eslint-config-standard-with-typescript/-/eslint-config-standard-with-typescript-39.1.1.tgz(a3s3rbe5igdmww6yaoaq3dpy3y)
+        version: https://registry.npmjs.org/eslint-config-standard-with-typescript/-/eslint-config-standard-with-typescript-39.1.1.tgz(4ee953a29c853e0e4a7eb5dc285f8fe3)
       eslint-plugin-import:
         specifier: ^2.29.0
         version: https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.29.1.tgz(@typescript-eslint/parser@6.21.0(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)(typescript@https://registry.npmjs.org/typescript/-/typescript-5.5.4.tgz))(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)
@@ -87,6 +87,24 @@ importers:
       vitest:
         specifier: ^2.0.5
         version: https://registry.npmjs.org/vitest/-/vitest-2.0.5.tgz(@types/node@https://registry.npmjs.org/@types/node/-/node-20.14.15.tgz)
+
+  packages/core: {}
+
+  packages/csv:
+    dependencies:
+      '@goods-converter/shared':
+        specifier: workspace:*
+        version: link:../shared
+
+  packages/shared: {}
+
+  packages/wooCommerce:
+    dependencies:
+      '@goods-converter/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/yml: {}
 
 packages:
 
@@ -3984,7 +4002,7 @@ snapshots:
     dependencies:
       eslint: https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz
 
-  eslint-config-standard-with-typescript@https://registry.npmjs.org/eslint-config-standard-with-typescript/-/eslint-config-standard-with-typescript-39.1.1.tgz(a3s3rbe5igdmww6yaoaq3dpy3y):
+  eslint-config-standard-with-typescript@https://registry.npmjs.org/eslint-config-standard-with-typescript/-/eslint-config-standard-with-typescript-39.1.1.tgz(4ee953a29c853e0e4a7eb5dc285f8fe3):
     dependencies:
       '@typescript-eslint/eslint-plugin': https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-6.21.0.tgz(@typescript-eslint/parser@6.21.0(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)(typescript@https://registry.npmjs.org/typescript/-/typescript-5.5.4.tgz))(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)(typescript@https://registry.npmjs.org/typescript/-/typescript-5.5.4.tgz)
       '@typescript-eslint/parser': https://registry.npmjs.org/@typescript-eslint/parser/-/parser-6.21.0.tgz(eslint@https://registry.npmjs.org/eslint/-/eslint-8.57.0.tgz)(typescript@https://registry.npmjs.org/typescript/-/typescript-5.5.4.tgz)
