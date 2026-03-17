@@ -1,13 +1,9 @@
-import { Brand, Category, Product } from "src/types";
+import { Product } from "src/types";
 import { Transform } from "stream";
 import { Transformer } from ".";
 
 export interface ConverterOptions {
   products: Iterable<Product>;
-
-  categories?: Category[];
-
-  brands?: Brand[];
 
   formatter: Transform;
 
@@ -16,4 +12,6 @@ export interface ConverterOptions {
   batchSize?: number;
 
   output: NodeJS.WritableStream;
+
+  collectColumns?: boolean;
 }
