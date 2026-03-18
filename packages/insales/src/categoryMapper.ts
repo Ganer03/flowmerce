@@ -1,4 +1,4 @@
-import { Category, Product } from "@goods-converter/core";
+import { Category, Product } from "@flowmerce/core";
 
 export function createCategoryMapper(categories?: Category[]) {
   const mappedCategories: Record<number, Category> = {};

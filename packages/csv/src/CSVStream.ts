@@ -1,4 +1,4 @@
-import { writeWithDrain } from "@goods-converter/shared";
+import { writeWithDrain } from "@flowmerce/shared";
 
 import { PassThrough } from "stream";
 

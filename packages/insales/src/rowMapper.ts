@@ -1,4 +1,4 @@
-import { Product, Brand } from "@goods-converter/core";
+import { Product, Brand } from "@flowmerce/core";
 import { getParams, getProperties } from "./paramsMapper";
 
 export function createRowMapper(mappedBrands: Record<number, Brand>, getCategories: any) {

@@ -1,4 +1,4 @@
-import { Product } from "@goods-converter/core";
+import { Product } from "@flowmerce/core";
 
 export function getParams(product: Product): Record<string, string> {
   const properties: Record<string, string> = {};

@@ -1,10 +1,8 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    coverage: {
-      reporter: ['json-summary', 'html'],
-      provider: 'v8',
-    }
-  }
-})
+    globals: true,
+    environment: "node",
+  },
+});

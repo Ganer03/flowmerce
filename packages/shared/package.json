@@ -1,6 +1,6 @@
 {
-  "name": "@goods-converter/shared",
-  "version": "0.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts"
+  "name": "@flowmerce/shared",
+  "version": "1.0.0",
+  "types": "dist/index.d.ts",
+  "private": true
 }

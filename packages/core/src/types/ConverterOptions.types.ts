@@ -1,9 +1,8 @@
-import { Product } from "src/types";
 import { Transform } from "stream";
-import { Transformer } from ".";
+import { Transformer, Product } from ".";
 
 export interface ConverterOptions {
-  products: Iterable<Product>;
+  products: Iterable<Product> | AsyncIterable<Product>;
 
   formatter: Transform;
 
@@ -11,7 +10,7 @@ export interface ConverterOptions {
 
   batchSize?: number;
 
-  output: NodeJS.WritableStream;
+  flashInterval?: number;
 
-  collectColumns?: boolean;
+  output: NodeJS.WritableStream;
 }

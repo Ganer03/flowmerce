@@ -1,87 +1,13 @@
 {
-  "author": {
-    "name": "German Bagdasaryan",
-    "email": "german.bagdasaryan@mail.ru"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Bagi4-source/goods-converter.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Bagi4-source/goods-converter/issues"
-  },
-  "name": "goods-exporter",
-  "version": "1.4.10",
-  "description": "A versatile JavaScript library for exporting goods data to various formats such as YML, CSV, and Excel. Simplify data export tasks with ease. Supports streams.",
-  "main": "./dist/cjs/index.cjs",
-  "type": "module",
-  "exports": {
-    "require": "./dist/cjs/index.cjs",
-    "import": "./dist/esm/index.mjs"
-  },
-  "types": "./dist/bundle.d.ts",
-  "files": [
-    "dist"
+  "name": "flowmerce",
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "build:watch": "rollup -c --watch",
-    "test": "vitest",
-    "lint": "eslint --ext .ts --fix",
-    "test-ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
-  },
-  "keywords": [
-    "stream",
-    "yml",
-    "json",
-    "csv",
-    "excel",
-    "tilda",
-    "tg-shop",
-    "insales",
-    "wocommerce",
-    "items",
-    "products",
-    "goods",
-    "export",
-    "exporter",
-    "tool",
-    "yandex",
-    "market"
-  ],
-  "dependencies": {
-    "exceljs": "^4.4.0",
-    "fast-xml-parser": "^4.4.1",
-    "json-stream-stringify": "^3.1.2"
+    "build": "pnpm -r build"
   },
   "devDependencies": {
-    "@rollup/plugin-multi-entry": "^6.0.1",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@types/node": "^20.8.7",
-    "@types/xml": "^1.0.11",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@vitest/coverage-v8": "^2.0.5",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard-with-typescript": "^39.1.1",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.3.0",
-    "eslint-plugin-no-comments": "^1.1.10",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-unused-imports": "^3.0.0",
-    "prettier": "^3.1.0",
-    "rollup": "^4.3.0",
-    "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-esbuild": "^6.1.0",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.2.2",
-    "vitest": "^2.0.5"
-  },
-  "engines": {
-    "node": ">= 16"
-  },
-  "license": "MIT"
+    "@types/node": "^25.5.0"
+  }
 }

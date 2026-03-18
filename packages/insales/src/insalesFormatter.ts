@@ -1,5 +1,5 @@
 import { Transform } from "stream";
-import type { Product, Category, Brand } from "@goods-converter/core";
+import type { Product, Category, Brand } from "@flowmerce/core";
 
 import { baseColumns } from "./columns";
 import { createCategoryMapper } from "./categoryMapper";
@@ -31,11 +31,11 @@ export function insalesFormatter(options: Options = {}) {
   const getCategories = createCategoryMapper(options.categories);
   const mapRow = createRowMapper(mappedBrands, getCategories);
 
-  let columns: string[] = baseColumns;
+  const columns = baseColumns; // 👈 фиксированные
 
   let headerWritten = false;
 
-  const stream = new Transform({
+  return new Transform({
     objectMode: true,
 
     transform(batch: Product[], _, cb) {
@@ -56,16 +56,5 @@ export function insalesFormatter(options: Options = {}) {
 
       cb();
     },
-  }) as Transform & {
-    setColumns?: (cols: Set<string>) => void;
-    mapRow?: (p: Product) => Record<string, any>;
-  };
-
-  stream.setColumns = (cols: Set<string>) => {
-    columns = [...baseColumns, ...Array.from(cols)];
-  };
-
-  stream.mapRow = mapRow;
-
-  return stream;
+  });
 }
