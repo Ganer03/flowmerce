@@ -9,11 +9,12 @@ export default [
       { file: "dist/index.cjs", format: "cjs" }
     ],
     plugins: [esbuild()],
-    external: [],
+    external: ['@flowmerce/core'],
   },
   {
     input: "src/index.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts()],
+    external: ['@flowmerce/core'],
   },
 ];

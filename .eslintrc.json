@@ -44,16 +44,6 @@
                 "distinctGroup": false,
                 "pathGroups": [
                     {
-                        "pattern": "react",
-                        "group": "external",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "src/__generated__/**",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
                         "pattern": "src/**/*",
                         "group": "parent",
                         "position": "before"

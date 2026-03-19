@@ -1,13 +1,46 @@
 {
   "name": "flowmerce",
+  "version": "1.0.0",
+  "description": "A modular JavaScript/TypeScript library for data transformation and export",
+  "keywords": [
+    "data",
+    "export",
+    "csv",
+    "streams",
+    "transformation",
+    "typescript"
+  ],
+  "author": "Flowmerce Team",
+  "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "pnpm -r build"
+    "build": "pnpm -r build",
+    "build:all": "pnpm -r build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:all": "pnpm -r test:run",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "clean": "pnpm -r exec rm -rf dist",
+    "dev": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0"
-  }
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "2.1.9",
+    "eslint": "^8.57.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flowmerce/flowmerce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flowmerce/flowmerce/issues"
+  },
+  "homepage": "https://github.com/flowmerce/flowmerce#readme"
 }
