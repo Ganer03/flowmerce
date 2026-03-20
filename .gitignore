@@ -3,7 +3,7 @@ node_modules
 dist
 .rollup.cache
 coverage/*
-!coverage/coverage-summary.json
-update-readme-version.js
-output.yml
+out1.csv
+out2.csv
 .qodo
+.DS_Store

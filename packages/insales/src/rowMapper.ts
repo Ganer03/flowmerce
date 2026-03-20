@@ -23,12 +23,22 @@ export function createRowMapper(mappedBrands: Record<number, Brand>, getCategori
       "Полное описание": product.description,
       "Габариты варианта": product.dimensions,
       Вес: product.weight,
+      "Размещение на сайте": product.available,
 
       НДС: product.vat?.toString(),
       "Валюта склада": product.currency.toString(),
+      "Изображения варианта":
+          product.parentId === undefined
+            ? product.images?.join(" ")
+            : undefined,
+      Изображения:
+          product.parentId === undefined
+            ? undefined
+            : product.images?.join(" "),
 
       "Ссылка на видео": product.videos?.[0],
 
+      "Параметр: Артикул": product.vendorCode, // TODO: брать из обычных параметров,
       "Параметр: Пол (Системный)": product.gender,
       "Параметр: Бренд (Системный)": product.vendor,
       "Параметр: Логотип бренда (Системный)":
@@ -38,13 +48,13 @@ export function createRowMapper(mappedBrands: Record<number, Brand>, getCategori
 
       "Параметр: Серия (Системный)": product.seriesName,
       "Параметр: Дата релиза (Системный)": product.saleDate,
-
-      ...getParams(product),
-      ...getProperties(product),
-
+      
       "Размерная сетка": JSON.stringify(product.sizes),
       "Связанные товары": product.relatedProducts?.join(","),
       "Ключевые слова": product.keywords?.join(","),
+
+      ...getProperties(product),
+      ...getParams(product),
     };
   };
 }
