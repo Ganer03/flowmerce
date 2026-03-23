@@ -12,115 +12,123 @@ npm install @flowmerce/core
 
 ## Usage
 
+### HandlebarsStreamWriter
+
+`HandlebarsStreamWriter` - это класс для потоковой записи данных с использованием шаблонов Handlebars. Он позволяет эффективно работать с большими объемами данных, не загружая их полностью в память.
+
+**Особенности:**
+- ✅ **Асинхронная запись** - предотвращает блокировку event loop
+- ✅ **Backpressure поддержка** - автоматически управляет потоком данных
+- ✅ **Валидация состояния** - предотвращает создание некорректных файлов (JSON без закрывающих скобок)
+- ✅ **Стриминг** - данные записываются по мере поступления
+
 ```typescript
-import { convert, Product, Category, Brand } from '@flowmerce/core';
-import { CSVStream } from '@flowmerce/csv';
+import { HandlebarsStreamWriter } from '@flowmerce/core';
+import fs from 'fs';
 
-// Определение типов
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  category: Category;
-  brand: Brand;
-  // ... другие поля
-}
+// Создаем экземпляр writer с валидацией (по умолчанию включена)
+const hsw = new HandlebarsStreamWriter();
 
-// Конвертация данных
-const csvStream = new CSVStream({});
-csvStream.setColumns(new Set(['id', 'name', 'price']));
+// Устанавливаем шаблоны
+hsw.setHeader("[\n");
+hsw.setBody('{{#if isFirstProduct}}{{else}},\n{{/if}}  {"id": {{this.id}}, "name": "{{this.name}}"}');
+hsw.setFooter("\n]");
 
-await convert({
-  products: productArray,
-  formatter: csvStream,
-  transformers: [
-    // кастомные трансформеры
-  ],
-  batchSize: 10,
-  flashInterval: 2000,
-  output: process.stdout
+// Регистрируем хелпер для экранирования
+hsw.registerHelper('escapeJson', (value: unknown) => {
+  if (value === undefined || value === null) return '""';
+  return JSON.stringify(String(value));
 });
+
+// Создаем поток
+const stream = hsw.createStream();
+
+// Направляем поток в файл
+stream.pipe(fs.createWriteStream('output.json'));
+
+// Асинхронно записываем данные
+await hsw.putData({ id: 1, name: "Item 1" });
+await hsw.putData({ id: 2, name: "Item 2" });
+
+// Завершаем запись (запишет футер)
+await hsw.commit();
 ```
 
-## Streaming Data Processing
-
-Flowmerce поддерживает обработку данных через генераторы и потоки, что позволяет работать с большими объемами данных без загрузки всего массива в память:
+### Создание CSV с потоковыми данными
 
 ```typescript
+import { HandlebarsStreamWriter } from '@flowmerce/core';
 import fs from 'fs';
-import { convert, Product } from '@flowmerce/core';
-import { insalesFormatter } from '@flowmerce/insales';
 
-// Имитация API с задержками
-function delay(ms: number) {
-  return new Promise((res) => setTimeout(res, ms));
-}
-
-async function* fakeApi(products: Product[]) {
-  for (const product of products) {
-    await delay(1000 + Math.random() * 2000); // Имитация сетевых задержек
-    console.log("API отдал:", product.productId);
-    yield product;
-  }
-}
-
-async function run() {
-  const productsData = require("./product.json");
-  const output = fs.createWriteStream("output.csv");
+async function createCsvFromApi() {
+  const hsw = new HandlebarsStreamWriter();
   
-  await convert({
-    products: fakeApi(productsData), // Генератор вместо массива
-    formatter: insalesFormatter(),
-    batchSize: 2, // Обработка по 2 продукта за раз
-    output,
+  // Настраиваем CSV шаблоны
+  hsw.setHeader("id;name;price;currency\n");
+  hsw.setBody('{{#if isFirstProduct}}{{else}};\n{{/if}}{{this.id}};{{this.name}};{{this.price}};{{this.currency}}');
+  hsw.setFooter("");
+  
+  // Регистрируем хелпер для экранирования CSV
+  hsw.registerHelper("escapeCsv", function (value: unknown) {
+    if (value === undefined || value === null) return "";
+    const str = String(value);
+    if (str.includes('"') || str.includes(";") || str.includes("\n") || str.includes(",")) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  });
+
+  const stream = hsw.createStream();
+  stream.pipe(fs.createWriteStream('products.csv'));
+
+  // Имитация медленного API
+  for (const product of await fetchProductsFromApi()) {
+    await hsw.putData(product); // Записываем сразу в поток
+  }
+
+  await hsw.commit();
+}
+```
+
+### Потоковая обработка продуктов
+
+```typescript
+import { HandlebarsStreamWriter } from '@flowmerce/core';
+import fs from 'fs';
+
+async function parseProducts() {
+  const hsw = new HandlebarsStreamWriter();
+  
+  // Настраиваем шаблоны для YML формата
+  hsw.setHeader('<?xml version="1.0" encoding="UTF-8"?>\n<yml_catalog date="{{date}}">\n<shop>\n<categories>\n{{#each categories}}\n<category id="{{id}}">{{name}}</category>\n{{/each}}\n</categories>\n<offers>\n');
+  
+  hsw.setBody('<offer id="{{productId}}" available="{{available}}">\n<url>{{url}}</url>\n<price>{{price}}</price>\n<currencyId>{{currency}}</currencyId>\n<categoryId>{{categoryId}}</categoryId>\n<name>{{title}}</name>\n<description>{{description}}</description>\n{{#if vendor}}<vendor>{{vendor}}</vendor>{{/if}}\n</offer>\n');
+  
+  hsw.setFooter('</offers>\n</shop>\n</yml_catalog>');
+  
+  // Создаем поток
+  const stream = hsw.createStream({
+    date: new Date().toISOString().split('T')[0],
+    categories: [
+      { id: 1, name: "Электроника" },
+      { id: 2, name: "Одежда" }
+    ]
   });
   
-  console.log("Готово");
+  // Направляем в файл
+  stream.pipe(fs.createWriteStream('products.yml'));
+  
+  // Имитация получения данных из API
+  for (const product of await fetchProductsFromAPI()) {
+    hsw.putData(product);
+  }
+  
+  // Завершаем
+  hsw.commit();
 }
 
-run();
+parseProducts();
 ```
-
-**Преимущества потоковой обработки:**
-- **Экономия памяти** - данные обрабатываются по частям
-- **Реальное время** - обработка начинается сразу при получении данных
-- **Масштабируемость** - работа с миллионами записей
-- **Отзывчивость** - прогресс виден в реальном времени
-```
-
-## API
-
-### Types
-
-- `Product` - тип для продукта
-- `Category` - тип для категории
-- `Brand` - тип для бренда
-- `ConverterOptions` - опции для конвертера
-- `Transformer` - тип для трансформера
-
-### Functions
-
-#### `convert(options: ConverterOptions)`
-
-Основная функция для конвертации данных через потоки.
-
-**Parameters:**
-- `products` - массив продуктов для конвертации
-- `formatter` - поток для форматирования вывода
-- `transformers` - массив трансформеров (опционально)
-- `batchSize` - размер батча (по умолчанию 10)
-- `flashInterval` - интервал сброса в миллисекундах (по умолчанию 2000)
-- `output` - поток вывода
-
-### Classes
-
-#### `BatchStream`
-
-Класс для группировки данных в батчи.
-
-#### `createTransformerStream`
-
-Функция для создания потока-трансформера.
 
 ## License
 
