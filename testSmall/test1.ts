@@ -1,11 +1,9 @@
 import fs from "fs";
-import { Product } from "@flowmerce/core";
 import { HandlebarsStreamWriter } from "@flowmerce/core";
-import { Brand, Category } from "@flowmerce/core/src/types";
 
-type CustomProduct = Product & {
-  children: Product[];
-};
+// type CustomProduct = Product & {
+//   children: Product[];
+// };
 
 function delay(ms: number) {
   return new Promise((res) => setTimeout(res, ms));
@@ -21,7 +19,7 @@ const properties = [
   "Валюта",
 ];
 
-async function* fakeApi(products: Product[]) {
+async function* fakeApi(products: any[]) {
   for await (const product of products) {
     await delay(1000 + Math.random() * 2000);
     console.log("API отдал:", `${product.productId} - ${product.variantId}`);
@@ -29,8 +27,8 @@ async function* fakeApi(products: Product[]) {
   }
 }
 
-function getData(products: CustomProduct[]): Product[] {
-  let productNew: Product[] = [];
+function getData(products: any[]): any[] {
+  let productNew: any[] = [];
   products.map((product) => {
     if (product.children?.length) {
       for (const child of product.children) {
@@ -47,15 +45,15 @@ function getData(products: CustomProduct[]): Product[] {
 }
 
 // Функция для поиска бренда по ID
-function findBrandById(brands: Brand[], brandId: number): Brand | undefined {
+function findBrandById(brands: any[], brandId: number): any | undefined {
   return brands.find((brand) => brand.id === brandId);
 }
 
 // Функция для поиска категории по ID
 function findCategoryById(
-  categories: Category[],
+  categories: any[],
   categoryId: number,
-): Category | undefined {
+): any | undefined {
   return categories.find((category) => category.id === categoryId);
 }
 
@@ -79,9 +77,9 @@ function escapeCsvValue(value: unknown): string {
 
 // Функция для создания CSV с использованием HandlebarsStreamWriter
 async function createCsvWithHandlebars(
-  products: Product[],
-  brands: Brand[],
-  categories: Category[],
+  products: any[],
+  brands: any[],
+  categories: any[],
   outputPath: string,
   customProperties?: string[],
 ) {
@@ -155,9 +153,9 @@ async function createCsvWithHandlebars(
 
 // Функция для создания JSON с использованием HandlebarsStreamWriter
 async function createJsonWithHandlebars(
-  products: Product[],
-  brands: Brand[],
-  categories: Category[],
+  products: any[],
+  brands: any[],
+  categories: any[],
   outputPath: string,
 ) {
   const hsw = new HandlebarsStreamWriter();
@@ -265,9 +263,9 @@ async function demonstrateJsonWithoutFooter() {
 
 // Функция для создания CSV с использованием fakeApi (стриминг)
 async function createCsvWithStreamingApi(
-  products: Product[],
-  brands: Brand[],
-  categories: Category[],
+  products: any[],
+  brands: any[],
+  categories: any[],
   outputPath: string,
 ) {
   console.log(`\n=== Создание CSV с потоковыми данными (${outputPath}) ===`);
@@ -346,7 +344,7 @@ async function testPerformanceWithLargeData() {
   console.log("\n=== Тест производительности с большим количеством данных ===");
 
   // Создаем большой массив тестовых данных
-  const largeDataSet: Product[] = [];
+  const largeDataSet: any[] = [];
   for (let i = 0; i < 1000; i++) {
     largeDataSet.push({
       productId: i,
@@ -444,9 +442,9 @@ async function testPerformanceWithLargeData() {
 
 // Функция для создания JSON с использованием fakeApi (стриминг)
 async function createJsonWithStreamingApi(
-  products: Product[],
-  brands: Brand[],
-  categories: Category[],
+  products: any[],
+  brands: any[],
+  categories: any[],
   outputPath: string,
 ) {
   console.log(`\n=== Создание JSON с потоковыми данными (${outputPath}) ===`);
