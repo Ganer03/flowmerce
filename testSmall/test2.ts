@@ -28,7 +28,7 @@ function generateProducts(count: number) {
 async function testWithArray() {
     console.log("\n=== ARRAY TEST ===")
 
-    const products = generateProducts(1_000_000)
+    const products = generateProducts(100_000)
 
     logMemory("before")
 
@@ -67,8 +67,14 @@ async function testWithArray() {
     console.log("time:", end - start, "ms")
 }
 
+function delay(ms: number) {
+    return new Promise((res) => setTimeout(res, ms));
+}
+
 async function* generateProductsStream(count: number) {
     for (let i = 0; i < count; i++) {
+        await delay(1) // убрать для временной проверки
+
         yield {
             productId: i,
             variantId: i,
@@ -77,7 +83,7 @@ async function* generateProductsStream(count: number) {
             categoryId: 1,
             price: i,
             currency: "USD",
-        }
+        };
     }
 }
 
@@ -97,7 +103,7 @@ async function testWithStream() {
     stream.pipe(fs.createWriteStream("stream.txt"))
 
     let i = 0
-    for await (const p of generateProductsStream(1_000_000)) {
+    for await (const p of generateProductsStream(100_000)) {
         if (i % 10000 === 0) {
             logMemory(`stream step ${i}`)
         }
