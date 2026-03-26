@@ -1,6 +1,6 @@
 {
   "name": "@flowmerce/formats",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "formats: InSales integration for Flowmerce packages",
   "keywords": ["insales", "integration", "ecommerce", "flowmerce"],
   "author": "Flowmerce Team",

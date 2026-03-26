@@ -1,5 +1,5 @@
 import { HandlebarsStreamWriter } from "@flowmerce/core";
-import { Brand, Category, Columns, Product } from "../../types";
+import { Brand, Category, Columns, Product } from "../types";
 import { createCategoryMapper, buildRowTemplate, resolveColumns, escape, getParams, getProperties } from "./utils";
 
 interface OptionsInsales {

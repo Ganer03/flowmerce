@@ -9,7 +9,11 @@ export default [
       { file: "dist/index.cjs", format: "cjs" }
     ],
     plugins: [esbuild()],
-    external: [],
+    external: [
+      'handlebars',
+      '@flowmerce/core',
+      'stream', 'events', 'fs', 'path', 'util', 'crypto', 'os', 'zlib', 'http', 'https', 'net', 'tls', 'dns', 'child_process', 'cluster', 'repl', 'vm', 'module', 'assert', 'buffer', 'process', 'global', 'console', 'require', '__dirname', '__filename'
+    ],
   },
   {
     input: "src/index.ts",

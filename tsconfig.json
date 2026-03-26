@@ -3,11 +3,12 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
 
-    "types": ["node"],
+    "types": ["Node"],
 
     "strict": true,
-    "esModuleInterop": true,
     "skipLibCheck": true
   }
 }

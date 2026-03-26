@@ -81,7 +81,7 @@ async function createCsvFromApi() {
   const stream = hsw.createStream();
   stream.pipe(fs.createWriteStream('products.csv'));
 
-  // Имитация медленного API
+  // через вызов API
   for (const product of await fetchProductsFromApi()) {
     await hsw.putData(product); // Записываем сразу в поток
   }

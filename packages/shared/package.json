@@ -1,6 +1,6 @@
 {
   "name": "@flowmerce/shared",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Shared utilities for Flowmerce packages",
   "keywords": ["utilities", "shared", "flowmerce"],
   "author": "Flowmerce Team",

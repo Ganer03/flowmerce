@@ -1,6 +1,6 @@
 import fs from "fs";
 import { insalesStreamWriter } from "@flowmerce/formats";
-import { Brand, Category, Product } from "@flowmerce/formats/types";
+import { Brand, Category, Currency, Product, Vat } from "@flowmerce/formats/src/types";
 
 function delay(ms: number) {
   return new Promise((r) => setTimeout(r, ms));

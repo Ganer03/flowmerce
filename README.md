@@ -5,26 +5,15 @@
 ![GitHub issues](https://img.shields.io/github/issues/Ganer03/flowmerce)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/Ganer03/flowmerce/blob/main/LICENSE)
 
-A modular JavaScript/TypeScript library for data transformation and export. Built with streams for high performance and memory efficiency.
+## Пакеты
 
-## Features
+- [`@flowmerce/core`](packages/core/README.md) - Ядро с шаблонизатором для реализации кастомных решений
+- [`@flowmerce/formats`](packages/csv/README.md) - Пакет с заготовленными форматами под разные CMS
+- [`@flowmerce/shared`](packages/shared/README.md) - Утилитные функции, которые используются в других пакетах
 
-- **Stream-based processing** for handling large datasets efficiently
-- **Modular architecture** with separate packages for different use cases
-- **TypeScript support** with comprehensive type definitions
-- **Memory efficient** batch processing
-- **Extensible** with custom transformers and formatters
+## Установка
 
-## Packages
-
-### Core
-- [`@flowmerce/core`](packages/core/README.md) - Core types and utilities
-- [`@flowmerce/formats`](packages/csv/README.md) - Formats streams for insales
-- [`@flowmerce/shared`](packages/shared/README.md) - Shared utilities
-
-## Installation
-
-Install individual packages:
+Установка индвидуальных пакетов:
 
 ```bash
 # Core functionality
@@ -37,121 +26,153 @@ pnpm add @flowmerce/formats
 pnpm add @flowmerce/shared
 ```
 
-Or install all packages:
+Или все пакеты одновременно:
 
 ```bash
 pnpm add @flowmerce/core @flowmerce/formats @flowmerce/shared
 ```
 
-## Quick Start
+## Пакеты и их функциональность
 
+### `@flowmerce/core`
+
+**Назначение:** Ядро библиотеки для потоковой обработки данных с использованием шаблонов Handlebars.
+
+**Основные возможности:**
+- Асинхронная запись данных с поддержкой backpressure
+- Валидация состояния для предотвращения создания некорректных файлов
+- Поддержка различных форматов: JSON, CSV, YML
+- Гибкая настройка шаблонов через Handlebars
+- Потоковая обработка больших объемов данных без загрузки в память
+
+**Пример использования:**
 ```typescript
-import { convert } from '@flowmerce/core';
-import { CSVStream } from '@flowmerce/csv';
-
-// Create CSV stream
-const csvStream = new CSVStream({});
-csvStream.setColumns(new Set(['id', 'name', 'price']));
-
-// Convert products to CSV
-await convert({
-  products: productArray,
-  formatter: csvStream,
-  output: process.stdout
-});
-```
-
-## Streaming Data Processing
-
-Flowmerce поддерживает обработку данных через генераторы и потоки, что позволяет работать с большими объемами данных без загрузки всего массива в память:
-
-```typescript
+import { HandlebarsStreamWriter } from '@flowmerce/core';
 import fs from 'fs';
-import { convert, Product } from "@flowmerce/core";
-import { insalesFormatter } from "@flowmerce/insales";
 
-// Имитация API с задержками
-function delay(ms: number) {
-  return new Promise((res) => setTimeout(res, ms));
-}
+const hsw = new HandlebarsStreamWriter();
+hsw.setHeader("[");
+hsw.setBody('{{#if isFirstProduct}}{{else}},\n{{/if}}  {\"id\": {{this.id}}, \"name\": \"{{this.name}}\"}');
+hsw.setFooter("\n]");
 
-async function* fakeApi(products: Product[]) {
-  for (const product of products) {
-    await delay(1000 + Math.random() * 2000); // Имитация сетевых задержек
-    console.log("API отдал:", product.productId);
-    yield product;
-  }
-}
+const stream = hsw.createStream();
+stream.pipe(fs.createWriteStream('output.json'));
 
-async function run() {
-  const productsData = require("./product.json");
-  const output = fs.createWriteStream("output.csv");
-  
-  await convert({
-    products: fakeApi(productsData), // Генератор вместо массива
-    formatter: insalesFormatter(),
-    batchSize: 2, // Обработка по 2 продукта за раз
-    output,
-  });
-  
-  console.log("Готово");
-}
+await hsw.putData({ id: 1, name: "Item 1" });
+await hsw.putData({ id: 2, name: "Item 2" });
 
-run();
+await hsw.commit();
 ```
 
-**Преимущества потоковой обработки:**
-- **Экономия памяти** - данные обрабатываются по частям
-- **Реальное время** - обработка начинается сразу при получении данных
-- **Масштабируемость** - работа с миллионами записей
-- **Отзывчивость** - прогресс виден в реальном времени
-
-## InSales Integration
+### Создание CSV с потоковыми данными
 
 ```typescript
-import { convert } from '@flowmerce/core';
-import { insalesFormatter } from '@flowmerce/insales';
-import { createWriteStream } from 'fs';
+import { HandlebarsStreamWriter } from '@flowmerce/core';
+import fs from 'fs';
 
-// Convert products to InSales format
-await convert({
-  products: productArray,
-  formatter: insalesFormatter({
-    categories: categoryArray,
-    brands: brandArray
-  }),
-  output: createWriteStream('insales-products.csv')
+async function createCsvFromApi() {
+  const hsw = new HandlebarsStreamWriter();
+  
+  // Настраиваем CSV шаблоны
+  hsw.setHeader("id;name;price;currency\n");
+  hsw.setBody('{{#if isFirstProduct}}{{else}};\n{{/if}}{{this.id}};{{this.name}};{{this.price}};{{this.currency}}');
+  hsw.setFooter("");
+  
+  // Регистрируем хелпер для экранирования CSV
+  hsw.registerHelper("escapeCsv", function (value: unknown) {
+    if (value === undefined || value === null) return "";
+    const str = String(value);
+    if (str.includes('"') || str.includes(";") || str.includes("\n") || str.includes(",")) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  });
+
+  const stream = hsw.createStream();
+  stream.pipe(fs.createWriteStream('products.csv'));
+
+  // через вызов API
+  for (const product of await fetchProductsFromApi()) {
+    await hsw.putData(product); // Записываем сразу в поток
+  }
+
+  await hsw.commit();
+}
+```
+
+---
+
+### `@flowmerce/formats`
+
+**Назначение:** Пакет для форматирования данных в формат, совместимый с интеграцией с платформой Insales.
+
+**Основные возможности:**
+- Генерация CSV-файлов для импорта в Insales
+- Поддержка сложных структур: бренды, категории, товары с вариантами
+- Гибкая настройка колонок: параметры и свойства
+- Поддержка шаблонов через Handlebars
+- Потоковая обработка данных для эффективного использования памяти
+
+**Пример использования:**
+```typescript
+import { insalesStreamWriter } from "@flowmerce/formats";
+import { Brand, Category, Product } from "@flowmerce/formats/types";
+
+const params = ["Цвет", "Размер", "Верхняя высота"];
+const properties = ["Верхняя высота", "Стиль носка", "Применимый сезон", "Тип каблука"];
+
+const writer = insalesStreamWriter({
+  categories: categories,
+  brands: brands,
+  columns: {
+    properties: properties,
+    params: params
+  }
 });
+
+const stream = writer.createStream();
+const fileStream = fs.createWriteStream("out.csv");
+stream.pipe(fileStream);
+
+for await (const product of fakeApi(productDataNew)) {
+  await writer.putData({ product });
+}
+
+await writer.commit();
+console.log("✅ Готово");
 ```
 
-## Development
+---
 
-This is a monorepo managed with pnpm workspaces.
+### `@flowmerce/shared`
 
-```bash
-# Install dependencies
-pnpm install
+**Назначение:** Общие утилиты для пакетов Flowmerce.
 
-# Build all packages
-pnpm run build
+**Основные возможности:**
+- Функция `writeWithDrain` для безопасной записи в поток с обработкой backpressure
+- Универсальные вспомогательные функции для работы с потоками
+- Поддержка различных типов данных
 
-# Run tests
-pnpm run test
+**Пример использования:**
+```typescript
+import { writeWithDrain } from '@flowmerce/shared';
 
-# Run tests for specific package
-pnpm --filter @flowmerce/csv run test
+const writer = writeWithDrain(writableStream);
+await writer('data chunk');
 ```
 
-## Architecture
+---
 
-Flowmerce uses a stream-based architecture for data processing:
+## Общая архитектура
 
-1. **Input**: Product data streams
-2. **Batch Processing**: Groups data into batches for efficiency
-3. **Transformers**: Apply transformations to the data
-4. **Formatter**: Convert data to target format (CSV, InSales, etc.)
-5. **Output**: Write to destination (file, stdout, etc.)
+Flowmerce использует потоковую архитектуру для обработки данных:
 
-## License
+1. **Входные данные:** Потоки с данными о продуктах
+2. **Пакетная обработка:** Группировка данных в пакеты для эффективности
+3. **Трансформеры:** Применение преобразований к данным
+4. **Форматтеры:** Преобразование данных в целевой формат (CSV, Insales и т.д.)
+5. **Выходные данные:** Запись в целевое место (файл, stdout и т.д.)
+
+## Лицензия
 
 MIT

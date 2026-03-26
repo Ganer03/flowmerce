@@ -17,10 +17,12 @@ export class HandlebarsStreamWriter {
   private hasFooter = false;
   private isCommitted = false;
   private enableValidation: boolean;
+  private handlebarsInstance: typeof Handlebars;
 
   constructor(options: HandlebarsStreamWriterOptions = {}) {
     this.enableValidation =
       options.enableValidation !== undefined ? options.enableValidation : true; // по умолчанию включено
+    this.handlebarsInstance = Handlebars.create();
   }
 
   /**
@@ -28,7 +30,7 @@ export class HandlebarsStreamWriter {
    * @param template - шаблон Handlebars для заголовка
    */
   setHeader(template: string): void {
-    this.headerTemplate = Handlebars.compile(template);
+    this.headerTemplate = this.handlebarsInstance.compile(template);
   }
 
   /**
@@ -36,7 +38,7 @@ export class HandlebarsStreamWriter {
    * @param template - шаблон Handlebars для тела
    */
   setBody(template: string): void {
-    this.bodyTemplate = Handlebars.compile(template);
+    this.bodyTemplate = this.handlebarsInstance.compile(template);
   }
 
   /**
@@ -44,7 +46,7 @@ export class HandlebarsStreamWriter {
    * @param template - шаблон Handlebars для футера
    */
   setFooter(template: string): void {
-    this.footerTemplate = Handlebars.compile(template);
+    this.footerTemplate = this.handlebarsInstance.compile(template);
   }
 
   /**
@@ -53,7 +55,7 @@ export class HandlebarsStreamWriter {
    * @param helper - функция хелпера
    */
   registerHelper(name: string, helper: Handlebars.HelperDelegate): void {
-    Handlebars.registerHelper(name, helper);
+    this.handlebarsInstance.registerHelper(name, helper);
   }
 
   /**

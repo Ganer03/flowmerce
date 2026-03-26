@@ -1,4 +1,4 @@
-import { Product } from "../../../types";
+import { Product } from "../../types";
 
 export function getParams(product: Product): Record<string, string> {
   const properties: Record<string, string> = {};

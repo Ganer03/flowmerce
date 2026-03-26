@@ -1,5 +1,5 @@
 import { baseColumns } from ".";
-import { Columns } from "../../../types";
+import { Columns } from "../../types";
 
 export function resolveColumns(
   options?: Columns

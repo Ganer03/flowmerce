@@ -13,6 +13,7 @@
   "author": "Flowmerce Team",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
@@ -33,6 +34,7 @@
     "@vitest/coverage-v8": "2.1.9",
     "eslint": "^8.57.0",
     "typescript": "^5.6.3",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^2.1.8"
   },
   "repository": {
@@ -42,5 +44,8 @@
   "bugs": {
     "url": "https://github.com/Ganer03/flowmerce/issues"
   },
-  "homepage": "https://github.com/Ganer03/flowmerce#readme"
+  "homepage": "https://github.com/Ganer03/flowmerce#readme",
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
 }
