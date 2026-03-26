@@ -1,7 +1,7 @@
 {
-  "name": "@flowmerce/insales",
+  "name": "@flowmerce/formats",
   "version": "1.0.0",
-  "description": "InSales integration for Flowmerce packages",
+  "description": "formats: InSales integration for Flowmerce packages",
   "keywords": ["insales", "integration", "ecommerce", "flowmerce"],
   "author": "Flowmerce Team",
   "license": "MIT",
@@ -26,10 +26,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/flowmerce/flowmerce.git"
+    "url": "https://github.com/Ganer03/flowmerce.git"
   },
   "bugs": {
-    "url": "https://github.com/flowmerce/flowmerce/issues"
+    "url": "https://github.com/Ganer03/flowmerce/issues"
   },
-  "homepage": "https://github.com/flowmerce/flowmerce#readme"
+  "homepage": "https://github.com/Ganer03/flowmerce#readme"
 }

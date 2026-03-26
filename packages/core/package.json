@@ -20,14 +20,8 @@
     "handlebars": "^4.7.8"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
+    "@types/node": "^25.5.0",
     "@types/handlebars": "^4.0.40",
-    "rollup": "^4.59.0",
-    "rollup-plugin-dts": "^6.4.0",
-    "rollup-plugin-esbuild": "^6.2.1",
-    "vitest": "^2.1.8"
-  },
-  "devDependencies": {
     "rollup": "^4.59.0",
     "rollup-plugin-dts": "^6.4.0",
     "rollup-plugin-esbuild": "^6.2.1",
@@ -35,10 +29,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/flowmerce/flowmerce.git"
+    "url": "https://github.com/Ganer03/flowmerce.git"
   },
   "bugs": {
-    "url": "https://github.com/flowmerce/flowmerce/issues"
+    "url": "https://github.com/Ganer03/flowmerce/issues"
   },
-  "homepage": "https://github.com/flowmerce/flowmerce#readme"
+  "homepage": "https://github.com/Ganer03/flowmerce#readme"
 }

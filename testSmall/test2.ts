@@ -271,7 +271,7 @@ async function testWithStream() {
     stream.pipe(fs.createWriteStream("stream.txt"))
 
     let i = 0
-    for await (const p of generateProductsStream(6_000_000)) {
+    for await (const p of generateProductsStream(1_000_000)) {
         if (i % 10000 === 0) {
             tracker.track()
         }

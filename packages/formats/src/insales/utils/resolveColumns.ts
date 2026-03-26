@@ -1,14 +1,9 @@
-import type { Product } from "@flowmerce/core";
-import type { Columns } from "@flowmerce/core/src/types/Columns.types";
-
-import { baseColumns } from "./columns";
-import { getParams, getProperties } from "./paramsMapper";
+import { baseColumns } from ".";
+import { Columns } from "../../../types";
 
 export function resolveColumns(
-  batch: Product[],
   options?: Columns
 ): string[] {
-  const firstProduct = batch[0];
 
   // properties
   let propertiesColumns: string[] = [];
@@ -16,8 +11,6 @@ export function resolveColumns(
     propertiesColumns = options.properties.map(
       (p) => `Параметр: ${p}`
     );
-  } else if (firstProduct) {
-    propertiesColumns = Object.keys(getProperties(firstProduct));
   }
 
   // params
@@ -26,8 +19,6 @@ export function resolveColumns(
     paramsColumns = options.params.map(
       (p) => `Свойство: ${p}`
     );
-  } else if (firstProduct) {
-    paramsColumns = Object.keys(getParams(firstProduct));
   }
 
   return [

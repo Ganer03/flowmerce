@@ -2,6 +2,6 @@
   "name": "testSmall",
   "dependencies": {
     "@flowmerce/core": "workspace:*",
-    "@flowmerce/insales": "workspace:*"
+    "@flowmerce/formats": "workspace:*"
   }
 }

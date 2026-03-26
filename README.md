@@ -2,8 +2,8 @@
 
 [![npm version](https://img.shields.io/npm/v/@flowmerce/core)](https://www.npmjs.com/package/@flowmerce/core)
 ![npm](https://img.shields.io/npm/dm/@flowmerce/core)
-![GitHub issues](https://img.shields.io/github/issues/flowmerce/flowmerce)
-[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/flowmerce/flowmerce/blob/main/LICENSE)
+![GitHub issues](https://img.shields.io/github/issues/Ganer03/flowmerce)
+[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/Ganer03/flowmerce/blob/main/LICENSE)
 
 A modular JavaScript/TypeScript library for data transformation and export. Built with streams for high performance and memory efficiency.
 
@@ -19,8 +19,7 @@ A modular JavaScript/TypeScript library for data transformation and export. Buil
 
 ### Core
 - [`@flowmerce/core`](packages/core/README.md) - Core types and utilities
-- [`@flowmerce/csv`](packages/csv/README.md) - CSV stream writer
-- [`@flowmerce/insales`](packages/insales/README.md) - InSales integration
+- [`@flowmerce/formats`](packages/csv/README.md) - Formats streams for insales
 - [`@flowmerce/shared`](packages/shared/README.md) - Shared utilities
 
 ## Installation
@@ -31,11 +30,8 @@ Install individual packages:
 # Core functionality
 pnpm add @flowmerce/core
 
-# CSV export
-pnpm add @flowmerce/csv
-
-# InSales integration
-pnpm add @flowmerce/insales
+# Formats stream
+pnpm add @flowmerce/formats
 
 # Shared utilities
 pnpm add @flowmerce/shared
@@ -44,7 +40,7 @@ pnpm add @flowmerce/shared
 Or install all packages:
 
 ```bash
-pnpm add @flowmerce/core @flowmerce/csv @flowmerce/insales @flowmerce/shared
+pnpm add @flowmerce/core @flowmerce/formats @flowmerce/shared
 ```
 
 ## Quick Start

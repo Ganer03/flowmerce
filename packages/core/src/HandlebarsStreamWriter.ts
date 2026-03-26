@@ -61,7 +61,7 @@ export class HandlebarsStreamWriter {
    * @param data - данные для рендеринга заголовка
    * @returns PassThrough поток
    */
-  createStream(data: Record<string, any> = {}): PassThrough {
+  createStream(data: Record<string, unknown> = {}): PassThrough {
     if (this.stream) {
       throw new Error(
         "Stream уже создан. Используйте один экземпляр для одного потока.",
@@ -93,7 +93,7 @@ export class HandlebarsStreamWriter {
    * Асинхронно записывает данные в поток используя шаблон тела
    * @param data - данные для рендеринга
    */
-  async putData(data: Record<string, any>): Promise<void> {
+  async putData(data: Record<string, unknown>): Promise<void> {
     this.validateState("putData");
 
     if (!this.bodyTemplate) {
@@ -108,7 +108,6 @@ export class HandlebarsStreamWriter {
     const dataWithFlags = {
       ...data,
       isFirstProduct: this.isFirstData,
-      isLastProduct: false, // мы не знаем, последний ли это элемент
     };
 
     const body = this.bodyTemplate(dataWithFlags);
@@ -121,7 +120,7 @@ export class HandlebarsStreamWriter {
    * Асинхронно завершает поток, записывая футер
    * @param data - данные для рендеринга футера
    */
-  async commit(data: Record<string, any> = {}): Promise<void> {
+  async commit(data: Record<string, unknown> = {}): Promise<void> {
     this.validateState("commit");
 
     if (!this.writer) {
